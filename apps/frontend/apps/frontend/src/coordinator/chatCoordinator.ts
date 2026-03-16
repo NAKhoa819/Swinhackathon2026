@@ -8,7 +8,6 @@ import type {
   PostChatMessageRequest,
   ChatMessageResponse,
   ChatSessionResponse,
-  ChatAction,
 } from './types';
 import { MOCK_CHAT_REPLY, MOCK_CHAT_SESSION } from './mockData';
 
@@ -59,19 +58,6 @@ export async function getChatSession(sessionId: string): Promise<ChatSessionResp
       session_id: sessionId,
     },
   };
-}
-
-// ---------------------------------------------------------------------------
-export async function handleFileUpload(sourceType: 'camera' | 'gallery' | 'link'): Promise<{ success: boolean }> {
-  await delay(500);
-  console.log(`[chatCoordinator] handleFileUpload from: ${sourceType}`);
-  return { success: true };
-}
-
-export async function handleActionSelection(action: ChatAction): Promise<{ success: boolean }> {
-  await delay(500);
-  console.log('[API BINDING] Bắn dữ liệu lên BE:', action.type, action.payload);
-  return { success: true };
 }
 
 // ---------------------------------------------------------------------------

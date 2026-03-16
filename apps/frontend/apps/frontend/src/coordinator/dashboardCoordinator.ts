@@ -24,19 +24,6 @@ export async function getDashboard(): Promise<DashboardResponse> {
 }
 
 // ---------------------------------------------------------------------------
-export async function submitManualEntry(type: 'income' | 'expense', amount: number): Promise<{ success: boolean }> {
-  await delay(500);
-  console.log(`[dashboardCoordinator] submitManualEntry: ${type} ${amount}`);
-  return { success: true };
-}
-
-export async function uploadReceipt(sourceType: 'camera' | 'gallery'): Promise<{ success: boolean }> {
-  await delay(500);
-  console.log(`[dashboardCoordinator] uploadReceipt from: ${sourceType}`);
-  return { success: true };
-}
-
-// ---------------------------------------------------------------------------
 function delay(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }

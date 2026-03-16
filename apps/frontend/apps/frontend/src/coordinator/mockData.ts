@@ -171,12 +171,20 @@ export const MOCK_GOAL_PROGRESS_MAP: Record<string, GoalProgressData> = {
 export const MOCK_CHAT_REPLY: ChatMessageData = {
   session_id: 's001',
   reply: {
-    message_id: 'm005',
+    message_id: 'm002',
     role: 'assistant',
-    text: 'Cảnh báo: Mục tiêu Mua Laptop đang chậm tiến độ do tháng này bạn chi tiêu lố. Bạn muốn điều chỉnh lộ trình như thế nào?',
+    text: 'Tôi đã hiểu mục tiêu của bạn. Tôi có thể tạo goal mua laptop 30 triệu với hạn hoàn thành sau 8 tháng.',
     actions: [
-      { type: 'plan_a', label: 'Plan A — Tăng 3tr/tháng', payload: { strategy: 'increase_savings', amount: 3000000 } },
-      { type: 'plan_b', label: 'Plan B — Dời hạn thêm 2 tháng', payload: { strategy: 'extend_deadline', months: 2 } }
+      {
+        type: 'create_goal',
+        label: 'Create Goal',
+        payload: {
+          goal_name: 'Buy Laptop',
+          goal_type: 'purchase',
+          target_amount: 30_000_000,
+          target_date: '2026-11-10',
+        },
+      },
     ],
   },
 };
@@ -190,7 +198,7 @@ export const MOCK_CHAT_SESSION: ChatSessionData = {
     {
       message_id: 'm001',
       role: 'user',
-      text: 'Tôi muốn mua laptop giá 30 triệu.',
+      text: 'Tôi muốn mua laptop giá 30 triệu trong 8 tháng tới',
     },
     {
       message_id: 'm002',
@@ -207,20 +215,6 @@ export const MOCK_CHAT_SESSION: ChatSessionData = {
             target_date: '2026-11-10',
           },
         },
-      ],
-    },
-    {
-      message_id: 'm003',
-      role: 'user',
-      text: 'Tạo đi.',
-    },
-    {
-      message_id: 'm004',
-      role: 'assistant',
-      text: 'Đây là kế hoạch: Tiết kiệm 3.750.000đ/tháng trong 8 tháng. Bạn có đồng ý với lộ trình này không?',
-      actions: [
-        { type: 'accept', label: 'Đồng ý', payload: { action: 'confirm' } },
-        { type: 'cancel', label: 'Hủy', payload: { action: 'abort' } }
       ],
     },
   ],
@@ -253,12 +247,12 @@ export const MOCK_CASH_FLOW: CashFlowData = {
   period_start: '2026-03-08',
   period_end: '2026-03-14',
   points: [
-    { date: '2026-03-08', income: 0, expense: 320_000, net: -320_000 },
+    { date: '2026-03-08', income: 0,         expense: 320_000, net: -320_000 },
     { date: '2026-03-09', income: 3_000_000, expense: 750_000, net: 2_250_000 },
-    { date: '2026-03-10', income: 0, expense: 480_000, net: -480_000 },
-    { date: '2026-03-11', income: 500_000, expense: 200_000, net: 300_000 },
-    { date: '2026-03-12', income: 0, expense: 650_000, net: -650_000 },
+    { date: '2026-03-10', income: 0,         expense: 480_000, net: -480_000 },
+    { date: '2026-03-11', income: 500_000,   expense: 200_000, net:  300_000 },
+    { date: '2026-03-12', income: 0,         expense: 650_000, net: -650_000 },
     { date: '2026-03-13', income: 4_000_000, expense: 900_000, net: 3_100_000 },
-    { date: '2026-03-14', income: 0, expense: 410_000, net: -410_000 },
+    { date: '2026-03-14', income: 0,         expense: 410_000, net: -410_000 },
   ],
 };

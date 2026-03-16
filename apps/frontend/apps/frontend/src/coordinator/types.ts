@@ -27,7 +27,11 @@ export type StrategySelected = 'A' | 'B';
 export type InputSource = 'manual' | 'ocr' | 'sms' | 'file';
 export type GoalType = 'purchase' | 'saving' | 'emergency_fund' | 'custom';
 export type ChatRole = 'user' | 'assistant';
-export type ChatActionType = string;
+export type ChatActionType =
+  | 'create_goal'
+  | 'view_goal_progress'
+  | 'open_input_data'
+  | 'refresh_dashboard';
 export type GapReason =
   | 'market_price_increase'
   | 'overspending'
