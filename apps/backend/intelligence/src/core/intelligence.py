@@ -1,33 +1,56 @@
-def calculate_sustainability_index(user_context: dict, market_context: dict) -> float:
+import math
+import time
+
+def calculate_metrics(profile: dict) -> dict:
     """
-    Calculates the Sustainability Index (S_i) based on user and market contexts.
-    
-    This is a simplified dummy calculation for the sake of the framework:
-    S_i = (Balance / (Monthly Spending * (1 + Inflation))) * Goal Factor
-    
-    Returns a float between 0.0 and 1.0 (clamped).
+    Calculates the Sustainability Index (S_i) and Confidence Score (C_s)
+    based on the user's financial profile.
+
+    This function utilizes the Gaussian Penalty Function for S_i and a weighted 
+    time-decay function for C_s.
+
+    Parameters:
+    - profile (dict): A dictionary containing 'mu_hist', 'sigma_hist', 'beta_prop', 
+                      'last_update_timestamp', 'data_completeness', and 'market_volatility'.
+
+    Returns:
+    - dict: A dictionary with the keys "s_i" (float) and "c_s" (float).
     """
-    try:
-        balance = user_context.get("balance", 0)
-        spending = user_context.get("monthly_spending", 1) # Avoid div by zero
-        goals = user_context.get("goals", [])
-        
-        inflation = market_context.get("inflation_rate", 0.0)
-        
-        # Simple goal factor: higher goals require more sustainability
-        goal_factor = 1.0
-        if "High Priority Retirement" in [g.get("name") for g in goals]:
-            goal_factor = 0.9 # Harder to sustain
-            
-        # Simplified formula
-        raw_si = (balance / max(spending * (1 + inflation), 1)) * goal_factor * 0.1
-        
-        # Clamp between 0.0 and 1.0
-        s_i = max(0.0, min(1.0, raw_si))
-        return s_i
-    except Exception as e:
-        print(f"Error calculating S_i: {e}")
-        return 0.5 # Default middle-ground
+
+    # 1. Sustainability Index (S_i) Logic (Gaussian Penalty Function)
+    mu_hist = profile.get("mu_hist", 0.0)
+    sigma_hist = profile.get("sigma_hist", 0.0)
+    beta_prop = profile.get("beta_prop", 0.0)
+
+    # Note: If sigma_hist is 0, default S_i to 1.0 if beta_prop <= mu_hist, else 0.5.
+    if sigma_hist == 0:
+        s_i = 1.0 if beta_prop <= mu_hist else 0.5
+    else:
+        # Formula: S_i = e^(-(beta_prop - mu_hist)^2 / 2*(sigma_hist^2))
+        exponent = -((beta_prop - mu_hist) ** 2) / (2 * (sigma_hist ** 2))
+        s_i = math.exp(exponent)
+
+    # 2. Confidence Score (C_s) Logic
+    last_update_timestamp = profile.get("last_update_timestamp", time.time())
+    r_comp = profile.get("data_completeness", 1.0)
+    v_mkt = profile.get("market_volatility", 0.0)
+
+    current_time = time.time()
+    
+    # Calculate Δt in days (assuming timestamps are in seconds)
+    delta_t_seconds = max(0, current_time - last_update_timestamp)
+    delta_t_days = delta_t_seconds / (24 * 3600)
+    
+    # Weight 1 (Freshness): use decay function f(Δt) = e^(-0.1 * Δt)
+    f_delta_t = math.exp(-0.1 * delta_t_days)
+    
+    # Formula: C_s = (0.5 * f(Δt)) + (0.3 * R_comp) + (0.2 * V_mkt)
+    c_s = (0.5 * f_delta_t) + (0.3 * r_comp) + (0.2 * v_mkt)
+
+    return {
+        "s_i": float(s_i),
+        "c_s": float(c_s)
+    }
 
 def determine_strategy(s_i: float) -> str:
     """
