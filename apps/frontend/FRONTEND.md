@@ -1,60 +1,81 @@
-PROJECT DOCUMENTATION: AI FINANCIAL ASSISTANT (FRONTEND MVP)
-1. YÊU CẦU MÔI TRƯỜNG
-Node.js (khuyến nghị v18 trở lên)
 
-Expo CLI
-
-App Expo Go (trên điện thoại) hoặc Simulator/Emulator (Android/iOS)
-
-2. LỆNH TERMINAL KHỞI CHẠY
-Mở terminal tại thư mục gốc của dự án và chạy các lệnh sau:
-
-Bash
-# 1. Cài đặt các package phụ thuộc (bao gồm liquid-glass, lucide-react-native...)
+Run the following commands in the project root:
+```bash
+# Install dependencies
 npm install
 
-# 2. Khởi chạy server Expo
+# Start Expo server
 npx expo start
 
-# 3. Xóa cache nếu gặp lỗi UI hoặc lỗi thư viện không nhận
+# Clear cache if needed
 npx expo start -c
-3. CẤU TRÚC THƯ MỤC CHÍNH
-Dự án được viết bằng React Native (Expo) + TypeScript. Dưới đây là các file quan trọng nhất cần nắm:
-
-Plaintext
+```
+---
+Project Structure
+Built with React Native (Expo) and TypeScript.
+```plaintext
 src/
 ├── components/
-│   ├── ActionButtons/      # Component render các nút bấm Neon (Plan A, Plan B, Accept...)
-│   ├── ChatBubble/         # Bong bóng chat của User (Gradient) và AI (Dark/Glass)
-│   └── FinancialChart/     # Biểu đồ dòng tiền (Cash Flow) với hiệu ứng Liquid Glass
+│   ├── ActionButtons/      # Neon action buttons (Plan A, Plan B, Accept...)
+│   ├── ChatBubble/         # Chat UI for user (gradient) and AI (dark/glass)
+│   └── FinancialChart/     # Cash flow chart with liquid glass effect
 ├── screens/
-│   ├── AgentScreen/        # Màn hình chính (Phòng chat AI) chứa input, list message
-│   └── DashboardScreen/    # Màn hình tổng quan (chứa biểu đồ và thẻ Goal)
+│   ├── AgentScreen/        # Chat screen (input + message list)
+│   └── DashboardScreen/    # Overview (charts and goal cards)
 ├── coordinator/
-│   ├── types.ts            # (QUAN TRỌNG) Định nghĩa API Contract / TypeScript Interfaces
-│   ├── mockData.ts         # Dữ liệu giả lập (Lịch sử chat, kịch bản Replan, Cash flow)
-│   └── chatCoordinator.ts  # Các hàm xử lý logic và chuẩn bị bắn data lên BE
-└── theme.ts                # File định nghĩa biến màu Neon, Gradient, Background
-4. LUỒNG DATA
-A. Luồng tải lịch sử Chat
-File: chatCoordinator.ts -> Hàm getChatSession(sessionId)
-
-Hiện tại: Đang return dữ liệu tĩnh từ mockData.ts.
-
-Nhiệm vụ BE: Đổi thành lệnh fetch(GET /api/chat/session).
-
-B. Luồng gửi tin nhắn text
-File: chatCoordinator.ts -> Hàm postChatMessage(payload)
-
-Hiện tại: Nhận text của user, delay 600ms và nhả ra câu trả lời giả lập.
-
-Nhiệm vụ BE: Đổi thành fetch(POST /api/chat/message, body: payload).
-
-C. Luồng bấm nút Action (Plan A, Plan B, Accept, Create Goal)
-File: chatCoordinator.ts -> Hàm handleActionSelection(action: ChatAction)
-
-Cơ chế: Khi user bấm nút, UI không chỉ truyền ID mà truyền toàn bộ object action (bao gồm type và payload data chi tiết).
-
-Hiện tại: Hàm đang chạy console.log('[API BINDING] Bắn lên BE:', action.type, action.payload);
-
-Nhiệm vụ BE: Dùng dữ liệu action.payload (ví dụ: { strategy: 'increase_savings', amount: 3000000 }) để bắn thẳng vào body của API điều chỉnh Goal:
+│   ├── types.ts            # API contracts and TypeScript interfaces
+│   ├── mockData.ts         # Mock data (chat, replan, cash flow)
+│   └── chatCoordinator.ts  # Logic and API integration layer
+└── theme.ts                # Colors, gradients, UI styles
+```
+---
+Data Flow
+A. Chat History Loading
+File: `chatCoordinator.ts`  
+Function: `getChatSession(sessionId)`
+Current:
+Returns static data from `mockData.ts`
+Backend:
+```ts
+fetch('/api/chat/session', {
+  method: 'GET'
+});
+```
+---
+B. Sending Text Messages
+File: `chatCoordinator.ts`  
+Function: `postChatMessage(payload)`
+Current:
+Simulates response with ~600ms delay
+Backend:
+```ts
+fetch('/api/chat/message', {
+  method: 'POST',
+  body: JSON.stringify(payload),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+```
+---
+C. Action Button Flow
+File: `chatCoordinator.ts`  
+Function: `handleActionSelection(action: ChatAction)`
+Mechanism:
+UI sends full action object:
+type
+payload
+Current:
+```ts
+console.log('[API BINDING] Send to BE:', action.type, action.payload);
+```
+Backend:
+Use `action.payload` directly in request body
+Example:
+```json
+{
+  "strategy": "increase_savings",
+  "amount": 3000000
+}
+```
+Send this payload to the goal adjustment API.
