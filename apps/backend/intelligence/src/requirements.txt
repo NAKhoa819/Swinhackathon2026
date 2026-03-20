@@ -1,0 +1,16 @@
+# LLM & Orchestration
+langchain
+langchain-google-genai
+langchain-aws
+langchain-groq
+google-genai
+boto3
+pydantic
+
+# Math & Logic
+numpy
+
+# Environment & API
+python-dotenv
+fastapi
+uvicorn
