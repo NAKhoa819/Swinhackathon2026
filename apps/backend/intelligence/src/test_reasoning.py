@@ -10,7 +10,7 @@ def run_test():
     
     # Simulate a scenario with a low S_i = 0.45 (45%)
     # S_i < 0.5 triggers Strategy B (Goal Re-alignment) in determine_strategy
-    s_i = 0.45
+    s_i = 0.95
     strategy = determine_strategy(s_i)
     
     print(f"\n[Context] Simulated S_i: {s_i}")
@@ -26,7 +26,7 @@ def run_test():
     system_prompt = build_system_prompt(user_context, strategy)
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": "I need help with my finances. I spend too much and want to save for retirement."}
+        {"role": "user", "content": "I am doing well with my finances. I am considering updating my computer with a new RTX 5090 costing $2,500. Would that be a good idea?"}
     ]
     
     # # Test Gemini

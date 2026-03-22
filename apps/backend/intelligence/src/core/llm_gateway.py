@@ -24,10 +24,10 @@ def get_model(provider: str = None):
         
         if backup_provider == "groq":
             from langchain_groq import ChatGroq
-            return ChatGroq(model=backup_model, temperature=0.7)
+            return ChatGroq(model=backup_model, temperature=0.8)
         elif backup_provider == "gemini":
             from langchain_google_genai import ChatGoogleGenerativeAI
-            return ChatGoogleGenerativeAI(model=backup_model, temperature=0.7)
+            return ChatGoogleGenerativeAI(model=backup_model, temperature=0.8)
         elif backup_provider == "mock":
             return "mock"
         else:

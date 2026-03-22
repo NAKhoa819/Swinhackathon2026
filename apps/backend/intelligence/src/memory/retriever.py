@@ -10,16 +10,39 @@ class ContextRetriever:
         """
         
         # Dummy mock data for context
-        return {
-            "balance": 5000.00,
-            "monthly_spending": 4500.00,
-            "recent_transactions": [
-                {"date": "2023-10-01", "amount": 150.00, "category": "Dining"},
-                {"date": "2023-10-05", "amount": 2500.00, "category": "Rent"},
-                {"date": "2023-10-12", "amount": 300.00, "category": "Groceries"}
-            ],
-            "goals": [
-                {"name": "High Priority Retirement", "target_amount": 1000000, "current_amount": 50000},
-                {"name": "Vacation 2024", "target_amount": 3000, "current_amount": 500}
-            ]
+        {
+    "user_id": "QA-2026-VNU",
+    "balance": 12500.00,
+    "monthly_spending": 3200.00,
+    "monthly_income": 5500.00,
+    "recent_transactions": [
+        {"date": "2026-03-01", "amount": 1800.00, "category": "Housing", "note": "Monthly Rent"},
+        {"date": "2026-03-03", "amount": 65.50, "category": "Utilities", "note": "Electricity/Water"},
+        {"date": "2026-03-05", "amount": 120.00, "category": "Groceries", "note": "Weekly Restock"},
+        {"date": "2026-03-08", "amount": 45.00, "category": "Transport", "note": "Fuel/Commute"},
+        {"date": "2026-03-10", "amount": 210.00, "category": "Entertainment", "note": "Concert Tickets"},
+        {"date": "2026-03-12", "amount": 35.00, "category": "Dining", "note": "Lunch with Team"},
+        {"code": "2026-03-15", "amount": 85.00, "category": "Subscription", "note": "Cloud Services/SaaS"},
+        {"date": "2026-03-18", "amount": 150.00, "category": "Health", "note": "Gym Membership/Supplements"}
+    ],
+    "goals": [
+        {
+            "name": "Emergency Fund", 
+            "target_amount": 15000, 
+            "current_amount": 10000, 
+            "priority": "High"
+        },
+        {
+            "name": "Nvidia RTX 5090 Upgrade", 
+            "target_amount": 2500, 
+            "current_amount": 1200, 
+            "priority": "Medium"
+        },
+        {
+            "name": "Masters Degree Fund", 
+            "target_amount": 40000, 
+            "current_amount": 5000, 
+            "priority": "Low"
         }
+    ]
+}

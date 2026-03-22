@@ -1,7 +1,7 @@
 import os
 import json
 from core.llm_gateway import get_completion
-from core.intelligence import determine_strategy, compute_s_i
+from core.intelligence import determine_strategy, calculate_metrics
 from core.prompts import build_system_prompt
 from models.schemas import StrategyResponse
 from db import get_user_context  # adjust to your actual db module
@@ -20,12 +20,12 @@ def run(user_id: str, user_message: str) -> StrategyResponse:
     """
     user_context = get_user_context(user_id)
 
-    s_i = compute_s_i(user_context)
+    s_i = calculate_metrics(user_context)["s_i"]
     strategy = determine_strategy(s_i)
 
-    print(f"[Context] User ID: {user_id}")
-    print(f"[Context] Computed S_i: {s_i}")
-    print(f"[Context] Triggered Strategy: {strategy}")
+    # print(f"[Context] User ID: {user_id}")
+    # print(f"[Context] Computed S_i: {s_i}")
+    # print(f"[Context] Triggered Strategy: {strategy}")
 
     system_prompt = build_system_prompt(user_context, strategy)
     messages = [
