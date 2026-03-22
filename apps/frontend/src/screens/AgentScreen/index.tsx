@@ -8,10 +8,10 @@ import {
     KeyboardAvoidingView,
     Platform,
     StatusBar,
-    SafeAreaView,
     Modal,
     ListRenderItem,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LiquidGlassView, isLiquidGlassSupported } from '@callstack/liquid-glass';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Plus, SendHorizonal, Camera, Image, Link, X } from 'lucide-react-native';

@@ -1,0 +1,188 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: D:\swin\swin2026\goalpilot\apps\backend\intelligence
+plugins: anyio-3.7.1
+collecting ... collected 18 items
+
+tests/test_api.py::test_health ERROR                                     [  5%]
+tests/test_api.py::test_get_dashboard ERROR                              [ 11%]
+tests/test_api.py::test_get_goal_progress ERROR                          [ 16%]
+tests/test_api.py::test_get_goal_progress_not_found ERROR                [ 22%]
+tests/test_api.py::test_create_goal ERROR                                [ 27%]
+tests/test_api.py::test_create_goal_missing_field ERROR                  [ 33%]
+tests/test_api.py::test_create_goal_invalid_date ERROR                   [ 38%]
+tests/test_api.py::test_post_chat_message ERROR                          [ 44%]
+tests/test_api.py::test_post_chat_message_empty ERROR                    [ 50%]
+tests/test_api.py::test_get_chat_session_not_found ERROR                 [ 55%]
+tests/test_api.py::test_get_chat_session_after_message ERROR             [ 61%]
+tests/test_api.py::test_get_cashflow_weekly ERROR                        [ 66%]
+tests/test_api.py::test_get_cashflow_weekly_with_goal_id ERROR           [ 72%]
+tests/test_api.py::test_get_cashflow_invalid_goal_id ERROR               [ 77%]
+tests/test_api.py::test_post_input_data_manual ERROR                     [ 83%]
+tests/test_api.py::test_post_input_data_ocr ERROR                        [ 88%]
+tests/test_api.py::test_post_input_data_invalid_source ERROR             [ 94%]
+tests/test_api.py::test_post_input_data_no_records ERROR                 [100%]
+
+=================================== ERRORS ====================================
+________________________ ERROR at setup of test_health ________________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+____________________ ERROR at setup of test_get_dashboard _____________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+__________________ ERROR at setup of test_get_goal_progress ___________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+_____________ ERROR at setup of test_get_goal_progress_not_found ______________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+_____________________ ERROR at setup of test_create_goal ______________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+______________ ERROR at setup of test_create_goal_missing_field _______________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+_______________ ERROR at setup of test_create_goal_invalid_date _______________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+__________________ ERROR at setup of test_post_chat_message ___________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+_______________ ERROR at setup of test_post_chat_message_empty ________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+______________ ERROR at setup of test_get_chat_session_not_found ______________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+____________ ERROR at setup of test_get_chat_session_after_message ____________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+_________________ ERROR at setup of test_get_cashflow_weekly __________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+___________ ERROR at setup of test_get_cashflow_weekly_with_goal_id ___________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+_____________ ERROR at setup of test_get_cashflow_invalid_goal_id _____________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+________________ ERROR at setup of test_post_input_data_manual ________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+_________________ ERROR at setup of test_post_input_data_ocr __________________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+____________ ERROR at setup of test_post_input_data_invalid_source ____________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+______________ ERROR at setup of test_post_input_data_no_records ______________
+tests\test_api.py:18: in client
+    with TestClient(app) as c:
+         ^^^^^^^^^^^^^^^
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\testclient.py:399: in __init__
+    super().__init__(
+E   TypeError: Client.__init__() got an unexpected keyword argument 'app'
+============================== warnings summary ===============================
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\fastapi\routing.py:211: 15 warnings
+  C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\fastapi\routing.py:211: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    is_coroutine = asyncio.iscoroutinefunction(dependant.call)
+
+C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\_utils.py:17: 19 warnings
+tests/test_api.py: 1 warning
+  C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\_utils.py:17: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    return asyncio.iscoroutinefunction(obj) or (
+
+tests/test_api.py::test_health
+  C:\Users\Admin\AppData\Roaming\Python\Python314\site-packages\starlette\_utils.py:18: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    callable(obj) and asyncio.iscoroutinefunction(obj.__call__)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR tests/test_api.py::test_health - TypeError: Client.__init__() got an un...
+ERROR tests/test_api.py::test_get_dashboard - TypeError: Client.__init__() go...
+ERROR tests/test_api.py::test_get_goal_progress - TypeError: Client.__init__(...
+ERROR tests/test_api.py::test_get_goal_progress_not_found - TypeError: Client...
+ERROR tests/test_api.py::test_create_goal - TypeError: Client.__init__() got ...
+ERROR tests/test_api.py::test_create_goal_missing_field - TypeError: Client._...
+ERROR tests/test_api.py::test_create_goal_invalid_date - TypeError: Client.__...
+ERROR tests/test_api.py::test_post_chat_message - TypeError: Client.__init__(...
+ERROR tests/test_api.py::test_post_chat_message_empty - TypeError: Client.__i...
+ERROR tests/test_api.py::test_get_chat_session_not_found - TypeError: Client....
+ERROR tests/test_api.py::test_get_chat_session_after_message - TypeError: Cli...
+ERROR tests/test_api.py::test_get_cashflow_weekly - TypeError: Client.__init_...
+ERROR tests/test_api.py::test_get_cashflow_weekly_with_goal_id - TypeError: C...
+ERROR tests/test_api.py::test_get_cashflow_invalid_goal_id - TypeError: Clien...
+ERROR tests/test_api.py::test_post_input_data_manual - TypeError: Client.__in...
+ERROR tests/test_api.py::test_post_input_data_ocr - TypeError: Client.__init_...
+ERROR tests/test_api.py::test_post_input_data_invalid_source - TypeError: Cli...
+ERROR tests/test_api.py::test_post_input_data_no_records - TypeError: Client....
+======================= 36 warnings, 18 errors in 0.47s =======================

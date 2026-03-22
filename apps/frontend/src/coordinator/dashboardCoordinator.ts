@@ -4,30 +4,22 @@
 // ============================================================
 
 import type { DashboardResponse } from './types';
-import { MOCK_DASHBOARD } from './mockData';
+import { fetchJson } from './apiClient';
+import { postInputData } from './inputDataCoordinator';
 
-/**
- * Lấy toàn bộ dữ liệu cần để render dashboard lần đầu.
- *
- * TODO: swap sang fetch thật khi BE sẵn sàng:
- *   const res = await fetch('/api/dashboard');
- *   return res.json();
- */
 export async function getDashboard(): Promise<DashboardResponse> {
-  // Simulate network latency
-  await delay(300);
-
-  return {
-    success: true,
-    data: MOCK_DASHBOARD,
-  };
+  return fetchJson<DashboardResponse>('/api/dashboard');
 }
 
 // ---------------------------------------------------------------------------
 export async function submitManualEntry(type: 'income' | 'expense', amount: number): Promise<{ success: boolean }> {
-  await delay(500);
-  console.log(`[dashboardCoordinator] submitManualEntry: ${type} ${amount}`);
-  return { success: true };
+  return postInputData({
+    source: 'manual',
+    payload: {
+      entry_type: type,
+      amount,
+    },
+  });
 }
 
 export async function uploadReceipt(sourceType: 'camera' | 'gallery'): Promise<{ success: boolean }> {

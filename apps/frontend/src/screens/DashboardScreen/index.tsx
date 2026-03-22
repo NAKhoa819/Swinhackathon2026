@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
   ScrollView,
-  SafeAreaView,
   StatusBar,
   TouchableOpacity,
   ActivityIndicator,
@@ -12,14 +11,16 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import { PenLine, ScanLine, Images } from 'lucide-react-native';
 import GoalSlider from '../../components/GoalSlider';
 import FinancialChart from '../../components/FinancialChart';
 import ChatPreview from '../../components/ChatPreview';
 import AppHeader from '../../components/AppHeader';
-import { MOCK_CASH_FLOW } from '../../coordinator/mockData';
 import { getDashboard, submitManualEntry, uploadReceipt } from '../../coordinator/dashboardCoordinator';
-import type { DashboardData } from '../../coordinator/types';
+import { getCashFlow } from '../../coordinator/cashFlowCoordinator';
+import type { CashFlowPoint, DashboardData } from '../../coordinator/types';
 import { COLORS } from '../../theme';
 import { FONT_BOLD, FONT_EXTRABOLD } from '../../utils/fonts';
 import styles from './styles';
@@ -33,6 +34,7 @@ const ACTION_CONFIG = [
 const DashboardScreen: React.FC = () => {
   const [activeGoalId, setActiveGoalId] = useState<string | null>(null);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [cashFlowPoints, setCashFlowPoints] = useState<CashFlowPoint[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -40,6 +42,29 @@ const DashboardScreen: React.FC = () => {
   const [entryModalVisible, setEntryModalVisible] = useState(false);
   const [entryType, setEntryType] = useState<'income' | 'expense' | null>(null);
   const [entryAmount, setEntryAmount] = useState('');
+
+  const loadDashboard = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setIsError(false);
+      const [dashboardRes, cashFlowRes] = await Promise.all([
+        getDashboard(),
+        getCashFlow(),
+      ]);
+
+      if (dashboardRes.success && dashboardRes.data) {
+        setDashboardData(dashboardRes.data);
+        setActiveGoalId((current) => current ?? dashboardRes.data.active_goal_id);
+        setCashFlowPoints(cashFlowRes.success && cashFlowRes.data ? cashFlowRes.data.points : []);
+      } else {
+        setIsError(true);
+      }
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const handleQuickAction = async (label: string) => {
     if (label === 'Enter Data') {
@@ -57,29 +82,14 @@ const DashboardScreen: React.FC = () => {
     if (!entryType || !entryAmount) return;
     await submitManualEntry(entryType, Number(entryAmount));
     setEntryModalVisible(false);
+    await loadDashboard();
   };
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        setIsLoading(true);
-        setIsError(false);
-        const res = await getDashboard();
-        if (res.success && res.data) {
-          setDashboardData(res.data);
-          setActiveGoalId(res.data.active_goal_id);
-        } else {
-          setIsError(true);
-        }
-      } catch (error) {
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchDashboard();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      void loadDashboard();
+    }, [loadDashboard]),
+  );
 
   if (isLoading) {
     return (
@@ -143,7 +153,7 @@ const DashboardScreen: React.FC = () => {
         <View style={[styles.sectionRow, { marginTop: 26 }]}>
           <Text style={[styles.sectionTitle, { fontFamily: FONT_EXTRABOLD }]}>Cash Flow</Text>
         </View>
-        <FinancialChart data={MOCK_CASH_FLOW.points} title="Weekly Overview" />
+        <FinancialChart data={cashFlowPoints} title="Weekly Overview" />
 
         {/* ── AI Advisor ───────────────────────────────────── */}
         <View style={[styles.sectionRow, { marginTop: 26 }]}>

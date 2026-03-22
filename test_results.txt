@@ -1,0 +1,27 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.11.0, pytest-9.0.2, pluggy-1.6.0 -- D:\swin\swin2026\goalpilot\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\swin\swin2026\goalpilot
+plugins: anyio-4.12.1, langsmith-0.7.22
+collecting ... collected 18 items
+
+apps/backend/intelligence/tests/test_api.py::test_health PASSED          [  5%]
+apps/backend/intelligence/tests/test_api.py::test_get_dashboard PASSED   [ 11%]
+apps/backend/intelligence/tests/test_api.py::test_get_goal_progress PASSED [ 16%]
+apps/backend/intelligence/tests/test_api.py::test_get_goal_progress_not_found PASSED [ 22%]
+apps/backend/intelligence/tests/test_api.py::test_create_goal PASSED     [ 27%]
+apps/backend/intelligence/tests/test_api.py::test_create_goal_missing_field PASSED [ 33%]
+apps/backend/intelligence/tests/test_api.py::test_create_goal_invalid_date PASSED [ 38%]
+apps/backend/intelligence/tests/test_api.py::test_post_chat_message PASSED [ 44%]
+apps/backend/intelligence/tests/test_api.py::test_post_chat_message_empty PASSED [ 50%]
+apps/backend/intelligence/tests/test_api.py::test_get_chat_session_not_found PASSED [ 55%]
+apps/backend/intelligence/tests/test_api.py::test_get_chat_session_after_message PASSED [ 61%]
+apps/backend/intelligence/tests/test_api.py::test_get_cashflow_weekly PASSED [ 66%]
+apps/backend/intelligence/tests/test_api.py::test_get_cashflow_weekly_with_goal_id PASSED [ 72%]
+apps/backend/intelligence/tests/test_api.py::test_get_cashflow_invalid_goal_id PASSED [ 77%]
+apps/backend/intelligence/tests/test_api.py::test_post_input_data_manual PASSED [ 83%]
+apps/backend/intelligence/tests/test_api.py::test_post_input_data_ocr PASSED [ 88%]
+apps/backend/intelligence/tests/test_api.py::test_post_input_data_invalid_source PASSED [ 94%]
+apps/backend/intelligence/tests/test_api.py::test_post_input_data_no_records PASSED [100%]
+
+============================= 18 passed in 0.19s ==============================

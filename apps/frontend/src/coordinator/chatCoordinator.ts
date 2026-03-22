@@ -10,55 +10,23 @@ import type {
   ChatSessionResponse,
   ChatAction,
 } from './types';
-import { MOCK_CHAT_REPLY, MOCK_CHAT_SESSION } from './mockData';
+import { fetchJson } from './apiClient';
 
-/**
- * Gửi tin nhắn user cho agent và nhận reply.
- *
- * TODO: swap sang fetch thật khi BE sẵn sàng:
- *   const res = await fetch('/api/chat/message', {
- *     method: 'POST',
- *     headers: { 'Content-Type': 'application/json' },
- *     body: JSON.stringify(payload),
- *   });
- *   return res.json();
- */
 export async function postChatMessage(
   payload: PostChatMessageRequest,
 ): Promise<ChatMessageResponse> {
-  // Simulate agent thinking time
-  await delay(600);
-
-  return {
-    success: true,
-    data: {
-      session_id: payload.session_id,
-      reply: {
-        ...MOCK_CHAT_REPLY.reply,
-        message_id: `m_${Date.now()}`, // unique mỗi lần — tránh duplicate key
-        text: MOCK_CHAT_REPLY.reply.text,
-      },
-    },
-  };
+  return fetchJson<ChatMessageResponse>('/api/chat/message', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
 }
 
 /**
  * Load lịch sử chat khi user mở tab Agent.
- *
- * TODO: swap sang fetch thật khi BE sẵn sàng:
- *   const res = await fetch(`/api/chat/session/${sessionId}`);
- *   return res.json();
  */
 export async function getChatSession(sessionId: string): Promise<ChatSessionResponse> {
-  await delay(300);
-
-  return {
-    success: true,
-    data: {
-      ...MOCK_CHAT_SESSION,
-      session_id: sessionId,
-    },
-  };
+  return fetchJson<ChatSessionResponse>(`/api/chat/session/${sessionId}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -69,8 +37,24 @@ export async function handleFileUpload(sourceType: 'camera' | 'gallery' | 'link'
 }
 
 export async function handleActionSelection(action: ChatAction): Promise<{ success: boolean }> {
-  await delay(500);
-  console.log('[API BINDING] Bắn dữ liệu lên BE:', action.type, action.payload);
+  console.log('[API BINDING] Thực thi action:', action.type, action.payload);
+  
+  if (action.type === 'create_goal') {
+    const payload = action.payload as any; // Type assertion to bypass strict generic checking for MVP
+    return fetchJson<{ success: boolean }>('/api/goals', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        goal_name: payload.goal_name || 'New Goal',
+        goal_type: payload.goal_type || 'custom',
+        target_amount: payload.target_amount || 0,
+        target_date: payload.target_date || '2026-12-31',
+        created_from: 'chat'
+      }),
+    });
+  }
+  
+  // Phase 1: Các hành động khác (plan_a, plan_b) chưa có endpoint thật
   return { success: true };
 }
 
