@@ -4,11 +4,11 @@
 
 ### `core/intelligence.py`
 
-**`calculate_sustainability_index(user_context: dict, market_context: dict) -> float`**
-- **Input Types**: `user_context` (Dict), `market_context` (Dict)
-- **Output Type**: `float` (range 0.0 to 1.0)
-- **Logic Summary**: Calculates the Sustainability Index ($S_i$) applying a Gaussian Penalty math model. The formula relies on historical data where $\mu_{hist}$ represents the historical average spend and $\sigma_{hist}$ represents the spend standard deviation. The basic sustainability index calculates the ratio between financial balance and spending, normalized by inflation and a goal priority factor. Data volatility drives the Gaussian Penalty threshold, dynamically lowering $S_i$. 
-- **Error Handling**: Uses a `try-except` block to catch calculation errors (e.g., missing dictionary keys or malformed data types) and defaults to a middle-ground $S_i$ of `0.5` upon error to prevent pipeline failure.
+**`calculate_metrics(profile: dict) -> dict`**
+- **Input Types**: `profile` (Dict containing 'mu_hist', 'sigma_hist', 'beta_prop', 'last_update_timestamp', 'data_completeness', and 'market_volatility')
+- **Output Type**: `dict` containing `s_i` (float) and `c_s` (float)
+- **Logic Summary**: Calculates the Sustainability Index ($S_i$) applying a Gaussian Penalty math model. Also calculates a Confidence Score ($C_s$) using a weighted time-decay function.
+- **Error Handling**: Missing dictionary keys default to robust fallback values (e.g., `sigma_hist=0` defaults $S_i$ safely based on relationship between `beta_prop` and `mu_hist`).
 
 **`determine_strategy(s_i: float) -> str`**
 - **Input Types**: `s_i` (float)
@@ -21,15 +21,20 @@
 ### `core/llm_gateway.py`
 
 **`get_model(provider: str = None) -> Any`**
-- **Input Types**: `provider` (str, defaults to env var)
-- **Output Type**: LangChain BaseChatModel instance (e.g., `ChatGoogleGenerativeAI`, `ChatGroq`, `ChatBedrock` or `"mock"`)
-- **Logic Summary**: Instantiates the selected LLM provider dynamically based on strings passed or environment variables.
+- **Input Types**: `provider` (str, defaults to env var `ACTIVE_LLM_PROVIDER`)
+- **Output Type**: LangChain BaseChatModel instance (e.g., `ChatBedrock`, `ChatGoogleGenerativeAI`, `ChatGroq`, or `"mock"`)
+- **Logic Summary**: Instantiates the selected LLM provider dynamically based on strings passed or environment variables. Supports fallback to secondary providers like Groq or Gemini via the `BACKUP_PROVIDER` config.
 
-**`get_completion(messages: list, response_format=None, provider=None, user_context=None, market_context=None) -> Any`**
-- **Input Types**: `messages` (List[Dict]), `response_format` (Pydantic Model class), `provider` (str), `user_context` (Dict), `market_context` (Dict)
+**`get_completion(messages: list, response_format=None, provider=None) -> Any`**
+- **Input Types**: `messages` (List[Dict]), `response_format` (Pydantic Model class), `provider` (str)
 - **Output Type**: Pydantic Model (e.g., `StrategyResponse`) or string message content.
-- **Logic Summary**: Routes prompt messages to the chosen LLM via LangChain. Optionally calculates $S_i$ internally when contexts are provided using the previously identified logic pattern.
-- **Error Handling (Invalid JSON)**: When `response_format` is provided, LangChain's `.with_structured_output()` is utilized. If a model like Llama 3 or Gemini returns malformed output or invalid JSON, LangChain’s internal mechanism throws an `OutputParserException`. The application relies on standard try-catch blocks to capture these execution faults—preventing hard crashes and logging errors appropriately (e.g., yielding default responses or retrying upstream).
+- **Logic Summary**: Routes prompt messages to the chosen LLM via LangChain. 
+- **Error Handling (Invalid JSON)**: When `response_format` is provided, LangChain's `.with_structured_output()` is utilized. If a model returns malformed output or invalid JSON, standard try-catch blocks upstream capture these execution faults—preventing hard crashes and logging errors appropriately (e.g., yielding default responses or retrying upstream).
+
+**`get_chat_advice(user_query: str, s_i: float) -> str`**
+- **Input Types**: `user_query` (str), `s_i` (float)
+- **Output Type**: `str`
+- **Logic Summary**: Gets chat advice from the LLM, setting the personality based on the $S_i$ value ("Strict and direct" vs "Encouraging and supportive"). Does not run any mathematical calculations internally.
 
 ### `models/schemas.py`
 
@@ -95,11 +100,9 @@ class DynamoDBClient:
 The Intelligence Engine uses LangChain for provider-agnostic testing, allowing robust comparative validation across models.
 
 ### Switching Between Models
-To switch models during verification processes (`gemini-1.5-pro` vs `llama3-70b`):
-1. Provide the model string explicitly in the `get_completion` function call:
-   - For Gemini 1.5 Pro: `get_completion(..., provider="gemini")`
-   - For Llama 3 70B: `get_completion(..., provider="llama3")`
-2. Alternatively, establish defaults utilizing the `LLM_PROVIDER` key within your `.env` execution file (i.e. `LLM_PROVIDER=gemini` or `LLM_PROVIDER=llama3`).
+To switch models during verification processes (`gemini` vs `groq` vs `bedrock`):
+1. Provide the provider string explicitly when fetching the model via `get_model(provider="...")` or inside `get_completion(..., provider="...")`, bypassing the active default if needed.
+2. Alternatively, establish defaults utilizing the `ACTIVE_LLM_PROVIDER` and `BACKUP_PROVIDER` keys within your `.env` execution file.
 
 ### Running Tests from the `tests/` Directory
 When evaluating pipelines using test runners isolated inside the `tests/` repository folder, importing locally from `core/` can frequently return a `ModuleNotFoundError`. 
@@ -118,4 +121,4 @@ from core.llm_gateway import get_completion
 from core.intelligence import determine_strategy
 ```
 
-This enforces Python to forcefully recognize the root codebase tree (e.g., `GP-Engine/`) as the origin structure—guaranteeing that tests dynamically link cross-level logic cleanly.
+This enforces Python to forcefully recognize the root codebase tree (e.g., `GoalPilot-Intelligence-Engine/`) as the origin structure—guaranteeing that tests dynamically link cross-level logic cleanly.
